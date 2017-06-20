@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chinasoft.shop.mapper.CategoryMapper">
+	<insert id="addCate">
+		insert into category values (#{id},#{name},#{goodsNums})
+	</insert>
+	<select id="findAll" resultType="category">
+		select * from category
+	</select>
+	<select id="findAllGoods" resultType="int">
+	select count(*) from goods where cid = #{id}
+	</select>
+	<select id="findCateByName" resultType="category">
+	select * from category where name = #{name}
+	</select>
+	<select id="findById" resultType="category">
+	select * from category where id = #{id}
+	</select>
+	<update id="update">
+	update category set name=#{name},goodsNums=#{goodsNums} where id=#{id}
+	</update>
+	<resultMap type="category" id="cateMap">
+	<id column="id" property="id"/>
+	<result column="name" property="name"/>
+	<collection property="goodsList" javaType="goods">
+    <id column="gid" property="id"/>
+	<result column="gname" property="name"/>
+	<result column="salePrice" property="salePrice"/>
+	<result column="marketPrice" property="marketPrice"/>
+	<result column="image" property="image"/>
+	</collection>
+	</resultMap>
+	<select id="findAllGoods2" resultMap="cateMap">
+	select category.id,category.name,goods.id gid,goods.salePrice,goods.name gname,goods.marketPrice,
+	goods.image from category,goods where category.id = goods.cid order by goods.latest limit 8;
+	</select>
+</mapper>

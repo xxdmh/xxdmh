@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chinasoft.shop.mapper.UserMapper">
+	<resultMap type="user" id="userMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="password" property="password" />
+		<result column="email" property="email" />
+		<result column="avatar" property="avatar" />
+		<result column="balance" property="balance" />
+		<result column="total" property="total" />
+		<result column="orderNums" property="orderNums" />
+		<result column="evaluateNums" property="evaluateNums" />
+		<result column="payNums" property="payNums" />
+		<result column="receiptNums" property="receiptNums" />
+		<result column="states" property="states" />
+		<result column="token" property="token" />
+		<collection property="orderList" javaType="orders">
+			<id column="oid" property="id" />
+			<result column="time" property="time" />
+			<result column="uname" property="uname" />
+			<result column="payWay" property="payWay" />
+			<result column="sendWay" property="sendWay" />
+			<result column="totalMoney" property="totalMoney" />
+			<result column="state" property="state" />
+		</collection>
+	</resultMap>
+	<select id="isName" resultType="user">
+		select * from user where name =
+		#{name}
+	</select>
+	<select id="isEmail" resultType="user">
+		select * from user where email =
+		#{email}
+	</select>
+	<select id="findUserByToken" resultType="user">
+		select * from user where
+		token = #{token}
+	</select>
+	<select id="findById" resultType="user">
+		select * from user where id = #{id}
+	</select>
+	<delete id="delete">
+		delete from user where id =#{id}
+	</delete>
+	<update id="update" parameterType="user">
+		update user set
+		name=#{name},password=#{password},email=#{email},avatar=#{avatar},
+		balance=#{balance},total=#{total},orderNums=#{orderNums},evaluateNums=#{evaluateNums},
+		payNums=#{payNums},receiptNums=#{receiptNums},states=#{states},token=#{token},
+		phone=#{phone},regTime=#{regTime} where id=#{id}
+	</update>
+	<select id="findUserByNamePass" parameterType="user" resultType="user">
+		select * from user where 
+		name=#{name} and password=#{password}
+	</select>
+	<insert id="addUser" parameterType="user">
+		insert into user values
+		(#{id},#{name},#{password},#{email},#{avatar},
+		#{balance},#{total},#{orderNums},
+		#{evaluateNums},#{payNums},#{receiptNums},#{states},#{token},#{phone},#{regTime});
+	</insert>
+	<select id="findAll" resultType="user">
+	select * from user
+	</select>
+</mapper>

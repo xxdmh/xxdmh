@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chinasoft.shop.mapper.GoodsMapper">
+	<insert id="addGoods">
+		insert into goods
+		values(#{id},#{name},#{salePrice},#{marketPrice},#{stock},#{num},
+		#{image},#{description},#{total},#{commentNums},#{cid},#{latest},#{hottest}),#{saleNums}
+	</insert>
+	<resultMap type="goods" id="findAllMap">
+    <id column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="salePrice" property="salePrice"/>
+	<result column="stock" property="stock"/>
+	<result column="marketPrice" property="marketPrice"/>
+	<result column="num" property="num"/>
+	<result column="image" property="image"/>
+	<result column="description" property="description"/>
+	<result column="total" property="total"/>
+	<result column="commentNums" property="commentNums"/>
+	<result column="cid" property="cid"/>
+	<association property="cate" javaType="category">
+	<result column="cname" property="name"/>
+	</association>
+	</resultMap>
+	<select id="findAll" resultMap="findAllMap">
+		select goods.id,goods.name,goods.salePrice,goods.stock,goods.marketPrice,
+	goods.num,goods.image,goods.description,goods.total,goods.commentNums,goods.cid,
+	category.name cname,category.id cid2 from goods,category 
+	where goods.cid=category.id
+	</select>
+	<resultMap type="goods" id="findByIdMap">
+	<id column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="salePrice" property="salePrice"/>
+	<result column="stock" property="stock"/>
+	<result column="marketPrice" property="marketPrice"/>
+	<result column="num" property="num"/>
+	<result column="image" property="image"/>
+	<result column="description" property="description"/>
+	<result column="total" property="total"/>
+	<result column="commentNums" property="commentNums"/>
+	<result column="cid" property="cid"/>
+	<association property="cate" javaType="category">
+	<result column="cname" property="name"/>
+	<result column="cid2" property="id"/>
+	</association>
+	</resultMap>
+	<select id="findById" resultMap="findByIdMap">
+	select goods.id,goods.name,goods.salePrice,goods.stock,goods.marketPrice,
+	goods.num,goods.image,goods.description,goods.total,goods.commentNums,goods.cid,
+	category.name cname,category.id cid2 from goods,category 
+	where goods.cid=category.id
+	and goods.id = #{id}
+	</select>
+	<select id="findById2" resultType="goods">
+	select * from goods where id = #{id}
+	</select>
+	<update id="update">
+	update goods set name=#{name},salePrice=#{salePrice},marketPrice=#{marketPrice},stock=#{stock},num=#{num},
+		image=#{image},description=#{description},total=#{total},commentNums=#{commentNums},cid=#{cid},
+		latest=#{latest},hottest=#{hottest},saleNums=#{saleNums}
+		 where id=#{id}
+	</update>
+	<select id="findByLatest" resultType="goods">
+	select * from goods order by latest limit 8;
+	</select>
+	<select id="findByHottest" resultType="goods">
+	select * from goods order by hottest limit 8;
+	</select>
+	<select id="findByCateId" resultType="goods">
+	select * from goods where cid = #{id}
+	</select>
+		<select id="findBySaleNums" resultType="goods">
+	select * from goods where cid = #{id} order by saleNums desc limit 10
+	</select>
+	<select id="findByHottest5" resultType="goods">
+	select * from goods order by hottest limit 5;
+	</select>
+</mapper>
