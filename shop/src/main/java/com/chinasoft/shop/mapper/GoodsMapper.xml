@@ -4,7 +4,7 @@
 	<insert id="addGoods">
 		insert into goods
 		values(#{id},#{name},#{salePrice},#{marketPrice},#{stock},#{num},
-		#{image},#{description},#{total},#{commentNums},#{cid},#{latest},#{hottest}),#{saleNums}
+		#{image},#{description},#{total},#{commentNums},#{cid},#{latest},#{hottest},#{saleNums})
 	</insert>
 	<resultMap type="goods" id="findAllMap">
     <id column="id" property="id"/>

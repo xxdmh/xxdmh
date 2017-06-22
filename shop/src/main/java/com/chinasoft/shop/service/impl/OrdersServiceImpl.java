@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chinasoft.shop.mapper.OrdersMapper;
-import com.chinasoft.shop.pojo.Goods;
 import com.chinasoft.shop.pojo.Orders;
 import com.chinasoft.shop.service.OrdersService;
 @Service
@@ -19,10 +18,5 @@ public class OrdersServiceImpl implements OrdersService {
 		return om.LimitFind(id);
 	}
 
-	@Override
-	public void addAds(Goods g, double sub, Integer num) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

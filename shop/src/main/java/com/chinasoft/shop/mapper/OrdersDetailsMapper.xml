@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.chinasoft.shop.mapper.OrdersDetailsMapper" >
-  <insert id="add"  >
-    insert into ordersdetails (id, nums, oid, 
-      gid, gname, gprice, 
-      subtotal,gimage)
-    values (#{id,jdbcType=VARCHAR}, #{nums,jdbcType=INTEGER}, #{oid,jdbcType=VARCHAR}, 
-      #{gid,jdbcType=VARCHAR}, #{gname,jdbcType=VARCHAR}, #{gprice,jdbcType=DOUBLE}, 
-      #{subtotal,jdbcType=DOUBLE},#{gimage,jdbcType=VARCHAR})
-  </insert>
-  <select id="findById" resultType="ordersDetails">
-  select * from ordersdetails where id =#{id,jdbcType=VARCHAR}
-  </select>
+<mapper namespace="com.chinasoft.shop.mapper.OrdersDetailsMapper">
+	<insert id="add">
+		insert into ordersdetails (id, nums, oid,
+		gid, gname, gprice,
+		subtotal,gimage,state,uid)
+		values (#{id,jdbcType=VARCHAR}, #{nums,jdbcType=INTEGER},
+		#{oid,jdbcType=VARCHAR},
+		#{gid,jdbcType=VARCHAR}, #{gname,jdbcType=VARCHAR}, #{gprice,jdbcType=DOUBLE},
+		#{subtotal,jdbcType=DOUBLE},#{gimage,jdbcType=VARCHAR},#{state,jdbcType=CHAR},
+		#{uid,jdbcType=VARCHAR})
+	</insert>
+	<select id="findById" resultType="ordersDetails">
+		select * from ordersdetails where id =#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="findCart" resultType="ordersDetails">
+		select * from ordersdetails where state = "1" and nums >= 1 and uid=#{uid,jdbcType=VARCHAR}
+	</select>
+	<select id="findByGoodsId" resultType="ordersDetails">
+		select * from ordersDetails where gid = #{id} and state="1"
+	</select>
+	<update id="update">
+		update ordersdetails set 
+		nums=#{nums,jdbcType=INTEGER},
+		oid=#{oid,jdbcType=VARCHAR},
+		gid= #{gid,jdbcType=VARCHAR}, gname=#{gname,jdbcType=VARCHAR},
+		gprice=#{gprice,jdbcType=DOUBLE},
+		subtotal=#{subtotal,jdbcType=DOUBLE},gimage=#{gimage,jdbcType=VARCHAR},
+		state=#{state,jdbcType=CHAR},uid=#{uid,jdbcType=VARCHAR}
+		 where id=#{id,jdbcType=VARCHAR};
+	</update>
+	<select id="totalMoney" resultType="double">
+	select sum(subtotal) from ordersdetails where state="1" and oid="1";
+	</select>
+	<select id="IsfindCart" resultType="ordersDetails">
+	select * from ordersdetails where state = "1" and nums >= 1 and uid=#{uid,jdbcType=VARCHAR}
+	</select>
+	<delete id="delete">
+	delete from ordersdetails where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteCart">
+	delete from ordersdetails where id = #{id,jdbcType=VARCHAR}
+	</delete>
 </mapper>

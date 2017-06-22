@@ -11,17 +11,31 @@
 <script type="text/javascript"
 	src="<c:url value='/js/jquery-3.2.1.min.js' />"></script>
 <script type="text/javascript">
-$(document).ready(function () {
-   
-})
-
+	$(document).ready(function() {
+	var c = Number($("#sub").val());
+	$("#final_sum").html(c);
+	$("#r1").on("click",function(){
+	var a =$("#fu").val("20");
+	var b = Number($("#fu").val());
+	var c = Number($("#sub").val());
+	$("#delivery_fee_show").html(b);
+	$("#final_sum").html(b+c);
+	});
+	$("#r2").on("click",function(){
+	var a = $("#fu").val("10");
+	var b = Number($("#fu").val());
+	var c = Number($("#sub").val());
+	$("#delivery_fee_show").html(b);
+	$("#final_sum").html(b+c);
+	});
+	});
 </script>
 <body class="second">
 	<div class="brand_list container_2">
 		<jsp:include page="../header.jsp" />
 		<div class="wrapper clearfix">
 			<div class="position mt_10">
-				<span>您当前的位置：</span> <a href=""> 首页</a> » 填写核对订单信息
+				<span>您当前的位置：</span> <a href="<c:url value='/user/index.action' />"> 首页</a> » 填写核对订单信息
 			</div>
 			<div class="myshopping m_10">
 				<ul class="order_step">
@@ -32,7 +46,7 @@ $(document).ready(function () {
 				</ul>
 			</div>
 
-			<form action='order_submit.jsp' method='post' name='order_form'>
+			<form action="<c:url value='/orders/addOrders.action' />" method='post' name='order_form'>
 				<input type="hidden" value="${tok}" name="tok">
 				<div class="cart_box m_10">
 					<div class="title">填写核对订单信息</div>
@@ -70,19 +84,16 @@ $(document).ready(function () {
 								</colgroup>
 								<tbody id="deliveryFormTrBox">
 									<tr>
-										<th><label><input type="radio"
-												name="sendWay" paytype="0" alt="20.00" value="Express"
-												checked>快递</label></th>
+										<th><label><input type="radio" name="sendWay" id="r1"
+												paytype="0" alt="20.00" value="Express">快递</label></th>
 										<td>直接由第三方物流公司配送 运费：￥20.00 &nbsp;&nbsp;</td>
-										<c:set value="20" var="express" />
 									</tr>
 									<tr>
-										<th><label><input type="radio"
-												name="sendWay" paytype="0" alt="10.00"
-												value="EMS">EMS</label></th>
+										<th><label><input type="radio" name="sendWay" id="r2"
+												paytype="0" alt="10.00" value="EMS">EMS</label></th>
 										<td>运费：￥10.00 &nbsp;&nbsp;</td>
-										<c:set value="10" var="express" />
 									</tr>
+									<input type="hidden" value="" id="fu"/>
 								</tbody>
 								<tfoot>
 									<tr>
@@ -92,7 +103,7 @@ $(document).ready(function () {
 											<label class="attr"><input type="radio"
 												name="sendTime" value="1-5">周一到周五</label> <label
 											class="attr"><input type="radio"
-												name="order.deliveryTime" value="6-7">周末</label></td>
+												name="sendTime" value="6-7">周末</label></td>
 									</tr>
 								</tfoot>
 							</table>
@@ -112,20 +123,20 @@ $(document).ready(function () {
 
 								<tr>
 									<th><label><input class="radio"
-											name="order.payType" alt="0" title="预存款支付" type="radio"
-											value="预存款支付" checked />预存款支付</label></th>
+											name="payWay" alt="0" title="预存款支付" type="radio" 
+											value="ADP" checked />预存款支付</label></th>
 									<td>支付手续费：￥0</td>
 								</tr>
 								<tr>
 									<th><label><input class="radio"
-											name="order.payType" alt="0" title="支付宝" type="radio"
-											value="支付宝" />支付宝</label></th>
+											name="payWay" alt="0" title="支付宝" type="radio"
+											value="Alipay" />支付宝</label></th>
 									<td>支付手续费：￥0</td>
 								</tr>
 								<tr>
 									<th><label><input class="radio"
-											name="order.payType" alt="0" title="货到付款" type="radio"
-											value="货到付款" />货到付款</label></th>
+											name="payWay" alt="0" title="货到付款" type="radio"
+											value="Cash on Delivery" />货到付款</label></th>
 									<td>支付手续费：￥0</td>
 								</tr>
 							</table>
@@ -157,40 +168,37 @@ $(document).ready(function () {
 								<tbody>
 									<c:set var="totalMoney" value="0"></c:set>
 									<c:choose>
-									<c:when test="${not empty ods }">
-										<tr>
-											<td><img src="<c:url value='/goodsImg${ods.gimage}' />"
-												width="66px" height="66px" alt="${ods.gname}"
-												title="${ods.gname}" /></td>
-											<td class="t_l"><a href="" class="blue">${ods.gname}</a></td>
-											<td>￥<b>${ods.gprice}</b></td>
-											<td>${ods.nums}</td>
-											<td>￥<b class="red2">${ods.subtotal}</b></td>
-											<c:set var="totalMoney"
-												value="${ods.subtotal}"></c:set></tr>
-									</c:when>
-									<c:otherwise>
-									<c:forEach items="${orderDetails}" var="orderDetail"
-										varStatus="s">
-										<input type="hidden" name="orderDetails[${s.index}].goods.id"
-											value="${orderDetail.goods.id}">
-										<input type="hidden" name="orderDetails[${s.index}].nums"
-											value="${orderDetail.nums}">
-										<tr>
-											<td><img src="${orderDetail.goods.thumbnail}"
-												width="66px" height="66px" alt="${orderDetail.goods.name}"
-												title="${orderDetail.goods.name}" /></td>
-											<td class="t_l"><a href="" class="blue">${orderDetail.goods.name}</a></td>
-											<td>￥<b>${orderDetail.goods.price2}</b></td>
-											<td>${orderDetail.nums}</td>
-											<td>￥<b class="red2">${orderDetail.goods.price2*orderDetail.nums}</b></td>
-											<c:set var="totalMoney"
-												value="${totalMoney+orderDetail.goods.price2*orderDetail.nums }"></c:set>
-										</tr>
-									</c:forEach>
-									<!-- 商品展示 结束-->
-									</c:otherwise>	
-																		</c:choose>														
+										<c:when test="${not empty ods }">
+											<tr>
+												<td><img src="<c:url value='/goodsImg${ods.gimage}' />"
+													width="66px" height="66px" alt="${ods.gname}"
+													title="${ods.gname}" /></td>
+												<td class="t_l"><a href="" class="blue">${ods.gname}</a></td>
+												<td>￥<b>${ods.gprice}</b></td>
+												<td>${ods.nums}</td>
+												<td>￥<b class="red2">${ods.subtotal}</b></td>
+												<c:set var="totalMoney" value="${ods.subtotal}"></c:set>
+											</tr>
+											<input type="hidden" value="${ods.subtotal}" id="sub">
+										</c:when>
+										<c:otherwise>
+											<c:forEach items="${odsList}" var="orderDetail"
+												varStatus="s">
+												<tr>
+													<td><img src="<c:url value='/goodsImg${orderDetail.gimage}' />"
+														width="66px" height="66px" alt="${orderDetail.gname}"
+														title="${orderDetail.gname}" /></td>
+													<td class="t_l"><a href="" class="blue">${orderDetail.gname}</a></td>
+													<td>￥<b>${orderDetail.gprice}</b></td>
+													<td>${orderDetail.nums}</td>
+													<td>￥<b class="red2">${orderDetail.subtotal}</b></td>
+													<c:set var="totalMoney"
+														value="${totalMoney+orderDetail.subtotal }"></c:set>
+												</tr>
+											</c:forEach>
+											<!-- 商品展示 结束-->
+										</c:otherwise>
+									</c:choose>
 								</tbody>
 							</table>
 						</div>
@@ -205,7 +213,8 @@ $(document).ready(function () {
 						<strong>结算信息</strong>
 						<div class="pink_box">
 							<p class="f14 t_l">
-								商品总金额：<b>${totalMoney}</b> + 运费总计：<b id='delivery_fee_show'><span id="ex"></span></b>
+							<input type="hidden" value="${totalMoney}" id="sub">
+								商品总金额：<b>${totalMoney}</b> + 运费总计：<b id='delivery_fee_show'>0</b>
 							</p>
 						</div>
 						<hr class="dashed" />
@@ -216,14 +225,15 @@ $(document).ready(function () {
 								<col width="250px" />
 								<tr>
 									<td class="t_r"><b class="price f14">应付总额：<span
-											class="red2">￥<b id='final_sum'>${totalMoney}</b></span>元
+											class="red2">￥<b id='final_sum'></b></span>元
 									</b></td>
 								</tr>
 							</table>
 						</div>
 						<p class="m_10 t_r">
+						<input type="hidden" value="${xxdmh }" name="xxdmh">
 							<input type="hidden" name="order.totalMoney"
-								value="${totalMoney}"> <input type="submit"
+								value="${totalMoney+sendPrice}"> <input type="submit"
 								class="submit_order" />
 						</p>
 					</div>

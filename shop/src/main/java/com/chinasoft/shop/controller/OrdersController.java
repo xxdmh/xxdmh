@@ -1,5 +1,6 @@
 package com.chinasoft.shop.controller;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -41,7 +42,7 @@ public class OrdersController {
 				Tok.isFlag(Tok.isAgain(session, tok));
 				request.getSession().removeAttribute("tok");
     	    	model.addAttribute("aList", as.findAll(u.getId()));
-    	    	oo=ods.findById(ods.addAds(g,sub,num));
+    	    	oo=ods.findById(ods.addAds(g,sub,num,u));
     	    	model.addAttribute("ods",oo);
 			} catch (UserException e) {
 				System.out.println(e.getMessage());
@@ -50,5 +51,52 @@ public class OrdersController {
 			}
     	return "goods/order_add";
     }
+    @RequestMapping("cart.action")
+	public String cart(Model model,HttpSession session) {
+    	User u = (User)session.getAttribute("user");
+		model.addAttribute("cartList",ods.findCart(u.getId()));
+		model.addAttribute("hot", gs.findByHottest5());
+		model.addAttribute("total", ods.totalMoney());
+		return "goods/cart";
+	}
+	@RequestMapping("addHot.action")
+	public String addHot (String id,HttpSession session) {
+		Goods g =gs.findById2(id);
+		User u = (User) session.getAttribute("user");
+		ods.addHotAds(g,u);
+		return "redirect:cart.action";
+	}
+	@RequestMapping("updateNums.action")
+	public void updateNums(String nums,String id){
+		OrdersDetails od = ods.findById(id);
+		int a = Integer.parseInt(nums);
+		if (a==0) {
+			ods.delete(id);
+		}else {
+		od.setNums(a);
+		od.setSubtotal(a*od.getGprice());
+		ods.update(od);
+		}
+	}
+	@RequestMapping("deleteCart.action")
+	public void deleteCart (String id) {
+		ods.deleteCart(id);
+	}
+	@RequestMapping("addCart2.action")
+	public void addCart2 (String id,HttpSession session) {
+		Goods g =gs.findById2(id);
+		User u = (User) session.getAttribute("user");
+		ods.addHotAds(g,u);
+	}
+	@RequestMapping("seeOrders.action")
+	public String seeOrders(String xxdmh,HttpSession session,Model model){
+		User u = (User)session.getAttribute("user");
+		String[] a = xxdmh.split(";");
+		model.addAttribute("odsList",ods.findCarts(a));
+		model.addAttribute("xxdmh", xxdmh);
+		model.addAttribute("aList", as.findAll(u.getId()));
+		Tok.setTok(session);
+		return "goods/order_add";
+	}
 
 }

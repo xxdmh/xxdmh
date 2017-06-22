@@ -1,13 +1,26 @@
 package com.chinasoft.shop.mapper;
 
+import java.util.List;
+
 import com.chinasoft.shop.pojo.OrdersDetails;
 
 public interface OrdersDetailsMapper {
-    int insert(OrdersDetails record);
 
-    int insertSelective(OrdersDetails record);
-
-	void add(OrdersDetails od);
+	void add(OrdersDetails ordersDetails);
 
 	OrdersDetails findById(String id);
+
+	List<OrdersDetails> findCart(String id);
+
+	OrdersDetails findByGoodsId(String id);
+
+	void update(OrdersDetails ordersDetails);
+
+	double totalMoney();
+
+	void delete(String id);
+
+	List<OrdersDetails> IsfindCart(String id);
+
+	void deleteCart(String id);
 }

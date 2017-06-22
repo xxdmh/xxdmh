@@ -7,15 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chinasoft.shop.exception.UserException;
 import com.chinasoft.shop.pojo.User;
 import com.chinasoft.shop.service.CategoryService;
 import com.chinasoft.shop.service.GoodsService;
+import com.chinasoft.shop.service.OrderDetailsService;
 import com.chinasoft.shop.service.UserService;
 import com.chinasoft.shop.utils.Tok;
 import com.chinasoft.shop.utils.VerifyImage;
@@ -29,6 +32,8 @@ public class UserController {
 	private GoodsService gs;
 	@Autowired
 	private CategoryService cs;
+	@Autowired
+	private OrderDetailsService ods;
 	@RequestMapping("index.action")
 	public String index1 (Model model) {
 		model.addAttribute("Latestgoods",gs.findByLatest());
@@ -116,6 +121,16 @@ public class UserController {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		}
+	}
+	@RequestMapping("cartShow.action")
+	@ResponseBody
+	public String cartShow(HttpSession session) {
+		User u = (User) session.getAttribute("user");
+		try {
+			return new ObjectMapper().writeValueAsString(ods.IsfindCart(u));
+		} catch (IOException e) {
+			throw new  RuntimeException(e);
 		}
 	}
 	@RequestMapping("logout.action")

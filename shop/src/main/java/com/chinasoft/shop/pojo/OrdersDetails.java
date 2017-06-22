@@ -16,6 +16,10 @@ public class OrdersDetails {
     private Double subtotal;
     
     private String gimage;
+    
+    private String state;
+    
+    private String uid;
 
     public String getId() {
         return id;
@@ -79,6 +83,22 @@ public class OrdersDetails {
 
 	public void setGimage(String gimage) {
 		this.gimage = gimage;
+	}
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	@Override

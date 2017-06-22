@@ -23,10 +23,10 @@
       <property name="maxUploadSize" value="10485760000"></property>  
       <property name="maxInMemorySize" value="40960"></property>  
      </bean>
-     <mvc:interceptors>
+<!--      <mvc:interceptors>
      <mvc:interceptor>
      <mvc:mapping path="/**"/>
      <bean class="com.chinasoft.shop.filter.BeforeLogin" />
      </mvc:interceptor>
-     </mvc:interceptors>
+     </mvc:interceptors> -->
      </beans>

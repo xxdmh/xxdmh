@@ -64,8 +64,10 @@
 	var a = Number($("#buyNums").val());
 	var b = Number($("#real_price").val());
 	$("#sub").val(a*b);
-	alert($("#sub").val())
 		location.href = "<c:url value='/orders/add.action/' />"+$("#dd").val()+"?sub="+$("#sub").val()+"&num="+a+"&tok="+$("#tok").val();
+	}
+	function joinCart(){
+	$.post("<c:url value='/orders/addCart2.action?id=' />"+$("#dd").val());
 	}
 
 </script>
